@@ -48,7 +48,7 @@ if st.button('Predict'):
 # Cancer Distribution Visualization with Line Graph
 st.header('Cancer Distribution')
 
-diagnosis_counts = df['DIAGNOSIS'].value_counts()
+diagnosis_counts = DataFrame ['DIAGNOSIS'].value_counts()
 
 fig, ax = plt.subplots(figsize=(8, 6))
 ax.plot(diagnosis_counts.index, diagnosis_counts.values, marker='o', linestyle='-')
