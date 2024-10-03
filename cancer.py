@@ -10,8 +10,6 @@ encoder = joblib.load('encoder.pkl')
 label_encoder = joblib.load('label_encoder.pkl')
 scaler = StandardScaler()
 
-# Load the original dataset
-df = pd.read_csv('CANCER.csv')
 
 # Streamlit app
 st.title('Cancer Diagnosis Prediction')
