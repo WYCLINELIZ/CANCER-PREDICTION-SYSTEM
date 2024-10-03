@@ -9,7 +9,8 @@ model = joblib.load('cancer_model.pkl')
 encoder = joblib.load('encoder.pkl')
 label_encoder = joblib.load('label_encoder.pkl')
 scaler = StandardScaler()
-
+# Load the original dataset
+df = pd.read_csv('CANCER.csv')
 
 # Streamlit app
 st.title('Cancer Diagnosis Prediction')
@@ -48,7 +49,7 @@ if st.button('Predict'):
 # Cancer Distribution Visualization with Line Graph
 st.header('Cancer Distribution')
 
-
+diagnosis_counts = df['DIAGNOSIS'].value_counts()
 
 fig, ax = plt.subplots(figsize=(8, 6))
 ax.plot(diagnosis_counts.index, diagnosis_counts.values, marker='o', linestyle='-')
