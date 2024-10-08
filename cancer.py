@@ -14,7 +14,8 @@ scaler = StandardScaler()
 df = pd.read_csv('CANCER.csv')
 
 # User Authentication (Simulated user database)
-users = {"user1": "password1", "user2": "password2"}  # Replace with a secure authentication method in real apps
+if 'users' not in st.session_state:
+    st.session_state.users = {"user1": "password1", "user2": "password2"}  # Replace with a secure method
 
 # Session state for login status
 if 'logged_in' not in st.session_state:
@@ -25,6 +26,22 @@ def navbar():
     selected = st.sidebar.selectbox("Navigate", ["Home", "Services", "Outcomes", "Logout"])
     return selected
 
+# Signup Page
+def signup_page():
+    st.image("cancer (3).jpeg", width=250)
+    st.title('Sign Up for Cancer Diagnosis Prediction System')
+
+    new_username = st.text_input("New Username")
+    new_password = st.text_input("New Password", type="password")
+
+    if st.button("Sign Up"):
+        if new_username in st.session_state.users:
+            st.error("Username already exists. Please choose a different username.")
+        else:
+            # Add new user to the simulated user database
+            st.session_state.users[new_username] = new_password
+            st.success(f"Signup successful! You can now log in with {new_username}.")
+
 # Login Page
 def login_page():
     st.image("cancer (3).jpeg", width=250)
@@ -34,14 +51,14 @@ def login_page():
     password = st.text_input("Password", type="password")
     
     if st.button("Login"):
-        if username in users and users[username] == password:
+        if username in st.session_state.users and st.session_state.users[username] == password:
             st.session_state.logged_in = True
             st.success(f"Welcome, {username}!")
         else:
             st.error("Invalid username or password")
             
-    if st.button("Sign Up"):
-        st.write("Signup page not implemented yet.")  # This can be extended to add signup functionality
+    if st.button("Go to Signup"):
+        st.session_state.signup = True  # Switch to signup page
 
 # Cancer Diagnosis Prediction
 def prediction_page():
@@ -106,4 +123,7 @@ if st.session_state.logged_in:
         st.session_state.logged_in = False
         st.success("You have successfully logged out.")
 else:
-    login_page()
+    if 'signup' in st.session_state and st.session_state.signup:
+        signup_page()
+    else:
+        login_page()
