@@ -26,27 +26,16 @@ def navbar():
     selected = st.sidebar.selectbox("Navigate", ["Home", "Services", "Outcomes", "Logout"])
     return selected
 
-# Signup Page
-def signup_page():
+# Combined Signup/Login Page
+def auth_page():
     st.image("cancer (3).jpeg", width=250)
-    st.title('Sign Up for Cancer Diagnosis Prediction System')
-
-    new_username = st.text_input("New Username")
-    new_password = st.text_input("New Password", type="password")
-
-    if st.button("Sign Up"):
-        if new_username in st.session_state.users:
-            st.error("Username already exists. Please choose a different username.")
-        else:
-            # Add new user to the simulated user database
-            st.session_state.users[new_username] = new_password
-            st.success(f"Signup successful! You can now log in with {new_username}.")
-
-# Login Page
-def login_page():
-    st.image("cancer (3).jpeg", width=250)
-    st.title('Welcome to Cancer Diagnosis Prediction System')
     
+    if st.session_state.signup_success:
+        st.success("Signup successful! You can now log in with your credentials.")
+    
+    st.title('Cancer Diagnosis Prediction System')
+    
+    # Login Form
     username = st.text_input("Username")
     password = st.text_input("Password", type="password")
     
@@ -57,8 +46,18 @@ def login_page():
         else:
             st.error("Invalid username or password")
             
-    if st.button("Go to Signup"):
-        st.session_state.signup = True  # Switch to signup page
+    # Signup Form
+    new_username = st.text_input("New Username", key="new_username")
+    new_password = st.text_input("New Password", type="password", key="new_password")
+
+    if st.button("Sign Up"):
+        if new_username in st.session_state.users:
+            st.error("Username already exists. Please choose a different username.")
+        else:
+            # Add new user to the simulated user database
+            st.session_state.users[new_username] = new_password
+            st.session_state.signup_success = True  # Flag for signup success
+            st.session_state.new_username = ""  # Clear the new username field
 
 # Cancer Diagnosis Prediction
 def prediction_page():
@@ -121,9 +120,10 @@ if st.session_state.logged_in:
         outcomes_page()
     elif page == "Logout":
         st.session_state.logged_in = False
+        st.session_state.signup_success = False  # Reset signup success status
         st.success("You have successfully logged out.")
 else:
-    if 'signup' in st.session_state and st.session_state.signup:
-        signup_page()
-    else:
-        login_page()
+    # Initialize signup success flag
+    if 'signup_success' not in st.session_state:
+        st.session_state.signup_success = False
+    auth_page()
