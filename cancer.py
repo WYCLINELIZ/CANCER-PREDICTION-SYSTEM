@@ -12,7 +12,7 @@ scaler = StandardScaler()
 # Load the original dataset
 df = pd.read_csv('CANCER.csv')
 
-st.image("cancer.jpeg")
+st.image("cancer (3).jpeg")
 
 # Streamlit app
 st.title('Cancer Diagnosis Prediction')
